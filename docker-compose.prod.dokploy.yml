@@ -79,18 +79,18 @@ services:
       - dokploy-network
     labels:
       - "traefik.enable=true"
-      # Dominio principal + aliases
-      - "traefik.http.routers.rippedandrenew.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`) || Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
-      - "traefik.http.routers.rippedandrenew.entrypoints=websecure"
-      - "traefik.http.routers.rippedandrenew.tls=true"
-      - "traefik.http.routers.rippedandrenew.tls.certresolver=letsencrypt"
-      - "traefik.http.services.rippedandrenew.loadbalancer.server.port=80"
-      # Redirigir HTTP → HTTPS
-      - "traefik.http.routers.rippedandrenew-http.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`) || Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
-      - "traefik.http.routers.rippedandrenew-http.entrypoints=web"
-      - "traefik.http.routers.rippedandrenew-http.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+      # HTTP → redirige a HTTPS (usa el middleware global definido en middlewares.yml)
+      - "traefik.http.routers.rippedandrenew-wger-1-web.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`) || Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
+      - "traefik.http.routers.rippedandrenew-wger-1-web.entrypoints=web"
+      - "traefik.http.routers.rippedandrenew-wger-1-web.service=rippedandrenew-wger-1-web"
+      - "traefik.http.routers.rippedandrenew-wger-1-web.middlewares=redirect-to-https@file"
+      - "traefik.http.services.rippedandrenew-wger-1-web.loadbalancer.server.port=80"
+      # HTTPS
+      - "traefik.http.routers.rippedandrenew-wger-1-websecure.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`) || Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
+      - "traefik.http.routers.rippedandrenew-wger-1-websecure.entrypoints=websecure"
+      - "traefik.http.routers.rippedandrenew-wger-1-websecure.service=rippedandrenew-wger-1-websecure"
+      - "traefik.http.routers.rippedandrenew-wger-1-websecure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.rippedandrenew-wger-1-websecure.loadbalancer.server.port=80"
 
   # ---------------------------------------------------------------------------
   # PostgreSQL 15
@@ -251,8 +251,8 @@ volumes:
 # -----------------------------------------------------------------------------
 networks:
   wger_network:
-    name: wger_network
-  # Red externa de Dokploy/Traefik — debe existir en el VPS antes del deploy.
-  # Dokploy la crea automáticamente. Si no existe: docker network create dokploy-network
+    name: rippedandrenew-wger
+    external: true
   dokploy-network:
+    name: dokploy-network
     external: true
