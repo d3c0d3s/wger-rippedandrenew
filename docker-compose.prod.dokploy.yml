@@ -18,7 +18,7 @@ services:
   # Aplicación principal Django/Gunicorn
   # ---------------------------------------------------------------------------
   web:
-    image: docker.io/wger/server:latest
+    image: docker.io/wger/server@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01
     logging:
       driver: json-file
       options:
@@ -42,6 +42,13 @@ services:
       timeout: 5s
       start_period: 300s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+          cpus: "1.0"
+        reservations:
+          memory: 256M
     restart: unless-stopped
     networks:
       - wger_network
@@ -52,7 +59,7 @@ services:
   # puerto 80. El SSL y los certificados los gestiona Traefik.
   # ---------------------------------------------------------------------------
   nginx:
-    image: docker.io/nginx:stable
+    image: docker.io/nginx:1.30.3-alpine
     logging:
       driver: json-file
       options:
@@ -68,7 +75,7 @@ services:
     expose:
       - 80
     healthcheck:
-      test: ["CMD", "service", "nginx", "status"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -79,24 +86,58 @@ services:
       - dokploy-network
     labels:
       - "traefik.enable=true"
-      # HTTP → redirige a HTTPS (usa el middleware global definido en middlewares.yml)
-      - "traefik.http.routers.rippedandrenew-wger-1-web.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`) || Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
+
+      # -----------------------------------------------------------------------
+      # Dominio principal: rippedandrenew.com + www.rippedandrenew.com
+      # -----------------------------------------------------------------------
+      # HTTP
+      - "traefik.http.routers.rippedandrenew-wger-1-web.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`)"
       - "traefik.http.routers.rippedandrenew-wger-1-web.entrypoints=web"
       - "traefik.http.routers.rippedandrenew-wger-1-web.service=rippedandrenew-wger-1-web"
-      - "traefik.http.routers.rippedandrenew-wger-1-web.middlewares=redirect-to-https@file"
       - "traefik.http.services.rippedandrenew-wger-1-web.loadbalancer.server.port=80"
       # HTTPS
-      - "traefik.http.routers.rippedandrenew-wger-1-websecure.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`) || Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
+      - "traefik.http.routers.rippedandrenew-wger-1-websecure.rule=Host(`rippedandrenew.com`) || Host(`www.rippedandrenew.com`)"
       - "traefik.http.routers.rippedandrenew-wger-1-websecure.entrypoints=websecure"
       - "traefik.http.routers.rippedandrenew-wger-1-websecure.service=rippedandrenew-wger-1-websecure"
       - "traefik.http.routers.rippedandrenew-wger-1-websecure.tls.certresolver=letsencrypt"
       - "traefik.http.services.rippedandrenew-wger-1-websecure.loadbalancer.server.port=80"
 
+      # -----------------------------------------------------------------------
+      # Middleware: redirect 301 de dominios alias → rippedandrenew.com
+      # -----------------------------------------------------------------------
+      - "traefik.http.middlewares.rnr-alias-redirect.redirectregex.regex=^https?://(www\\.)?(rippedandrenew\\.net|rippedandrenew\\.info|rippedandrenew\\.org)(.*)"
+      - "traefik.http.middlewares.rnr-alias-redirect.redirectregex.replacement=https://rippedandrenew.com$${3}"
+      - "traefik.http.middlewares.rnr-alias-redirect.redirectregex.permanent=true"
+
+      # -----------------------------------------------------------------------
+      # Dominios alias HTTP → redirect a rippedandrenew.com
+      # -----------------------------------------------------------------------
+      - "traefik.http.routers.rnr-alias-web.rule=Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
+      - "traefik.http.routers.rnr-alias-web.entrypoints=web"
+      - "traefik.http.routers.rnr-alias-web.middlewares=rnr-alias-redirect"
+      - "traefik.http.routers.rnr-alias-web.service=rippedandrenew-wger-1-web"
+
+      # -----------------------------------------------------------------------
+      # Dominios alias HTTPS → redirect a rippedandrenew.com (con SSL propio)
+      # -----------------------------------------------------------------------
+      - "traefik.http.routers.rnr-alias-websecure.rule=Host(`rippedandrenew.net`) || Host(`www.rippedandrenew.net`) || Host(`rippedandrenew.info`) || Host(`www.rippedandrenew.info`) || Host(`rippedandrenew.org`) || Host(`www.rippedandrenew.org`)"
+      - "traefik.http.routers.rnr-alias-websecure.entrypoints=websecure"
+      - "traefik.http.routers.rnr-alias-websecure.middlewares=rnr-alias-redirect"
+      - "traefik.http.routers.rnr-alias-websecure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.rnr-alias-websecure.service=rippedandrenew-wger-1-web"
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: "0.25"
+        reservations:
+          memory: 32M
+
   # ---------------------------------------------------------------------------
   # PostgreSQL 15
   # ---------------------------------------------------------------------------
   db:
-    image: docker.io/postgres:15-alpine
+    image: docker.io/postgres:15.18-alpine
     shm_size: 256mb
     logging:
       driver: json-file
@@ -126,6 +167,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+        reservations:
+          memory: 256M
     restart: unless-stopped
     networks:
       - wger_network
@@ -134,7 +182,7 @@ services:
   # Redis (caché y broker de Celery)
   # ---------------------------------------------------------------------------
   cache:
-    image: docker.io/redis
+    image: docker.io/redis:8.8.0-alpine
     logging:
       driver: json-file
       options:
@@ -152,6 +200,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.5"
+        reservations:
+          memory: 64M
     restart: unless-stopped
     networks:
       - wger_network
@@ -160,7 +215,7 @@ services:
   # PowerSync (sincronización offline para la app móvil)
   # ---------------------------------------------------------------------------
   powersync:
-    image: docker.io/journeyapps/powersync-service:latest
+    image: docker.io/journeyapps/powersync-service:1.22.0
     logging:
       driver: json-file
       options:
@@ -182,6 +237,13 @@ services:
     expose:
       - 8080
       - 9090
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+        reservations:
+          memory: 128M
     restart: unless-stopped
     networks:
       - wger_network
@@ -190,7 +252,7 @@ services:
   # Celery Worker (tareas asíncronas: sync de ejercicios, ingredientes, etc.)
   # ---------------------------------------------------------------------------
   celery_worker:
-    image: docker.io/wger/server:latest
+    image: docker.io/wger/server@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01
     logging:
       driver: json-file
       options:
@@ -210,6 +272,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+        reservations:
+          memory: 128M
     restart: unless-stopped
     networks:
       - wger_network
@@ -218,7 +287,7 @@ services:
   # Celery Beat (scheduler de tareas periódicas)
   # ---------------------------------------------------------------------------
   celery_beat:
-    image: docker.io/wger/server:latest
+    image: docker.io/wger/server@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01
     logging:
       driver: json-file
       options:
@@ -232,6 +301,13 @@ services:
     depends_on:
       celery_worker:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.25"
+        reservations:
+          memory: 32M
     restart: unless-stopped
     networks:
       - wger_network
