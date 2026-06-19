@@ -2,3 +2,7 @@
 /docker-compose.override.yml
 /dev-postgres/.env
 /dev/.env
+
+# Archivos con secretos de producción — NUNCA committear
+/config/prod.env
+/config/redis.conf
