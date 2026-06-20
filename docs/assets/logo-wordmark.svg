@@ -1,0 +1,47 @@
+<svg viewBox="0 0 800 300" width="800" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #1A1A1A; }
+      .wordmark {
+        font-family: 'Barlow', 'Rajdhani', sans-serif;
+        font-size: 80px;
+        font-weight: 700;
+        fill: #FFFFFF;
+        text-anchor: middle;
+      }
+      .tagline {
+        font-family: 'Barlow', 'Rajdhani', sans-serif;
+        font-size: 24px;
+        font-weight: 300;
+        fill: #E0E0E0;
+        text-anchor: middle;
+      }
+      .arrow {
+        stroke: #CCFF00;
+        stroke-width: 10;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" width="800" height="300" />
+
+  <!-- Both lines left-aligned at x=100, arrow after RIPPED -->
+  <text x="100" y="130" class="wordmark">RIPPED</text>
+
+  <!-- Arrow superscript: RIPPED at 80px ~= 310px wide, starts x=100, ends ~410, arrow at 418 -->
+  <g transform="translate(418, 62)">
+    <line x1="0" y1="35" x2="35" y2="0" class="arrow" />
+    <polyline points="0,0 35,0 35,35" class="arrow" />
+  </g>
+
+  <!-- & RENEW left-aligned same x=100 -->
+  <text x="100" y="215" class="wordmark">&amp; RENEW</text>
+
+  <!-- Tagline left-aligned -->
+  <text x="103" y="262" class="tagline">Train hard. Recover smarter.</text>
+
+</svg>
