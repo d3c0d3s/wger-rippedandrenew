@@ -20,14 +20,14 @@
 {% block breadcrumbs %}
     {% clear_breadcrumbs %}
 {% endblock %}
-<html lang="{{ language.short_name }}">
+<html lang="{{ language.short_name }}" data-bs-theme="dark">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="content-language" content="{{ i18n_language.code }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/logos/rnr-badge.svg' %}" type="image/svg+xml">
 
     <!-- OpenGraph -->
     {% block opengraph %}

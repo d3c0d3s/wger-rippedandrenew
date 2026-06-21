@@ -1,0 +1,26 @@
+<svg viewBox="0 0 512 512" width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .badge-bg {
+        fill: #1A1A1A;
+        stroke: #CCFF00;
+        stroke-width: 12;
+      }
+      .badge-text {
+        font-family: 'Barlow', 'Rajdhani', sans-serif;
+        font-size: 180px;
+        font-weight: 700;
+        fill: #CCFF00;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+    </style>
+  </defs>
+
+  <!-- Badge circle — r=238 leaves 6px padding so stroke doesn't clip at edges -->
+  <circle class="badge-bg" cx="256" cy="256" r="238" />
+
+  <!-- Badge text -->
+  <text class="badge-text" x="256" y="265">RNR</text>
+
+</svg>
