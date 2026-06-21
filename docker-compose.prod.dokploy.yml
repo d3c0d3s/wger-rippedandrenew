@@ -11,6 +11,11 @@
 #   - POSTGRES_PASSWORD    (cambia el valor por defecto 'wger')
 #   - PS_DATABASE_URI / PS_STORAGE_PG_URI  (actualiza con el nuevo password de postgres)
 #
+# web / celery_worker / celery_beat se construyen desde el código fuente en
+# ./server (fork de wger-project/wger incorporado vía git subtree), usando el
+# Dockerfile de producción oficial de wger. Para actualizar wger:
+#   git subtree pull --prefix=server upstream master --squash
+#
 
 services:
 
@@ -18,7 +23,12 @@ services:
   # Aplicación principal Django/Gunicorn
   # ---------------------------------------------------------------------------
   web:
-    image: docker.io/wger/server@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01
+    build:
+      context: ./server
+      dockerfile: extras/docker/production/Dockerfile
+      args:
+        BUILD_COMMIT: ${BUILD_COMMIT:-local}
+        BUILD_DATE: ${BUILD_DATE:-}
     logging:
       driver: json-file
       options:
@@ -252,7 +262,9 @@ services:
   # Celery Worker (tareas asíncronas: sync de ejercicios, ingredientes, etc.)
   # ---------------------------------------------------------------------------
   celery_worker:
-    image: docker.io/wger/server@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01
+    build:
+      context: ./server
+      dockerfile: extras/docker/production/Dockerfile
     logging:
       driver: json-file
       options:
@@ -287,7 +299,9 @@ services:
   # Celery Beat (scheduler de tareas periódicas)
   # ---------------------------------------------------------------------------
   celery_beat:
-    image: docker.io/wger/server@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01
+    build:
+      context: ./server
+      dockerfile: extras/docker/production/Dockerfile
     logging:
       driver: json-file
       options:
