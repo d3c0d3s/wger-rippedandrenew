@@ -1,3 +1,9 @@
+# RNR private apps — copied here at build time by
+# private-rnr/scripts/prepare-build.sh. Must NEVER be committed to this
+# public AGPL repo. See docs/brand-guide.md AGPL strategy notes.
+/rnr_core/
+/rnr_settings.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
