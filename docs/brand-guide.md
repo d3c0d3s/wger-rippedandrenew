@@ -144,12 +144,27 @@ El dashboard es la pantalla principal de la app. Su estructura refleja la dualid
 
 ## 9. Navegación principal
 
-| Sección | Concepto |
+Estructura aprobada: **Renovación** como sección umbrella con mega-menu desplegable (dropdown de dos columnas en desktop, sub-rutas en mobile). Evita saturar la tab bar mobile — 5 items principales en vez de 6.
+
+| Sección | Concepto | Tipo |
+|---|---|---|
+| Inicio | Dashboard RIPPED\|RENEW | Link directo |
+| Programas | Rutinas y planes de entrenamiento | Link directo |
+| Renovación | Sección umbrella — ver subsecciones | Mega-menu |
+| Comunidad | Social, challenges, rankings | Link directo |
+| Perfil | Cuenta, ajustes (solo mobile tab bar) | Link directo |
+
+### Subsecciones de Renovación (mega-menu desktop / sub-rutas mobile)
+
+| Subsección | Contenido |
 |---|---|
-| Inicio | Dashboard RIPPED\|RENEW |
-| Programas | Rutinas y planes de entrenamiento |
-| Renovación | Recuperación, nutrición, bienestar |
-| Comunidad | Social, challenges, rankings |
+| Recuperación | Descanso y sueño, seguimiento de fatiga, plan de recuperación semanal |
+| Nutrición | Planes de alimentación, registro de macros, base de ingredientes |
+| Movilidad | Movilidad y stretching |
+
+### Implementación
+- **Desktop:** dropdown de dos columnas (RECUPERACIÓN | NUTRICIÓN) bajo "Renovación" en el nav bar, fondo `#222222`, borde superior `#CCFF00` 2px
+- **Mobile:** bottom tab bar con 5 iconos — Inicio, Programas, Renovación, Comunidad, Perfil. Al tocar "Renovación" se navega a una pantalla con las 3 subsecciones listadas (no dropdown — espacio insuficiente en mobile)
 
 ---
 
