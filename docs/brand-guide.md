@@ -179,10 +179,18 @@ Estructura aprobada: **Renovación** como sección umbrella con mega-menu desple
 
 ---
 
-## Assets pendientes de generar en Gemini
+## Assets generados
 
-- [ ] Logo vectorial SVG (wordmark completo)
-- [ ] Badge RNR SVG (app icon base)
-- [ ] Iconografía line-style: entrenamiento, nutrición, recuperación, comunidad, progreso
+- [x] Logo vectorial SVG (wordmark completo) → `docs/assets/logo-wordmark.svg`
+- [x] Badge RNR SVG (app icon base) → `docs/assets/logo-badge-rnr.svg`
+- [x] Iconografía line-style → `docs/assets/icons/`
+  - `icon-entrenamiento.svg` — mancuerna
+  - `icon-nutricion.svg` — triángulo de macros (P/C/G)
+  - `icon-recuperacion.svg` — corazón con pulso
+  - `icon-comunidad.svg` — dos siluetas
+  - `icon-progreso.svg` — gráfico ascendente
+
+## Assets pendientes
+
 - [ ] Foto hero principal (atleta, gym, dark mood)
 - [ ] Fotos secundarias por sección (Programas, Renovación, Comunidad)
