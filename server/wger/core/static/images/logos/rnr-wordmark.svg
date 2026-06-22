@@ -7,14 +7,14 @@
         font-size: 80px;
         font-weight: 700;
         fill: #FFFFFF;
-        text-anchor: middle;
+        text-anchor: start;
       }
       .tagline {
         font-family: 'Barlow', 'Rajdhani', sans-serif;
         font-size: 24px;
         font-weight: 300;
         fill: #E0E0E0;
-        text-anchor: middle;
+        text-anchor: start;
       }
       .arrow {
         stroke: #CCFF00;

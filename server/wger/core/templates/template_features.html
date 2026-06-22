@@ -18,13 +18,13 @@
 
 
 {% load i18n static %}
-<html lang="{{ language.short_name }}">
+<html lang="{{ language.short_name }}" data-bs-theme="dark">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8">
-    <meta name="author" content="wger team">
+    <meta name="author" content="Ripped & Renew">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/logos/rnr-badge.svg' %}" type="image/svg+xml">
 
     <!-- OpenGraph -->
     {% block opengraph %}
@@ -36,6 +36,7 @@
     {% endblock %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-compiled.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-custom.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesomefree/css/all.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/landing_page.css' %}">
 
@@ -43,7 +44,7 @@
     <script src="{% static 'node/@popperjs/core/dist/umd/popper.js' %}"></script>
     <script src="{% static 'js/language.js' %}"></script>
 
-    <title>wger Workout Manager - {% translate "Features" %}</title>
+    <title>Ripped & Renew - {% translate "Features" %}</title>
 </head>
 
 <body>

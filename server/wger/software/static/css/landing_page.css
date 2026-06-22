@@ -6,11 +6,12 @@
 
 :root {
     --blue: #245daf;
-    --green: #218064;
-    --red: #bd5164;
-    --dark-yellow: #9a6a23;
-    --bg-blue: #163665;
-    --bg-light-blue: #eaf0fe;
+    --green: #4caf50;
+    --red: #e85d75;
+    --dark-yellow: #ff6b00;
+    --bg-blue: #1A1A1A;
+    --bg-light-blue: #232323;
+    --lime: #CCFF00;
 }
 
 html,
@@ -29,20 +30,28 @@ a {
 }
 
 .bg-dark-blue {
-    background-color: var(--bg-blue);
+    background-color: var(--lime);
+    color: #1A1A1A;
     border: 0;
 }
 
 .bg-light-blue {
     background-color: var(--bg-light-blue);
+    color: #fff;
+}
+
+.bg-light-blue h1,
+.bg-light-blue p {
+    color: #fff;
 }
 
 .bg-dark-blue:hover {
-    color: "#fff";
+    color: #1A1A1A;
+    background-color: #D9FF4D;
 }
 
 .text-dark-blue {
-    color: var(--bg-blue);
+    color: var(--lime);
 }
 
 
@@ -74,7 +83,7 @@ ul.bullet-green li::before {
 
 /* styles of html */
 header {
-    background: linear-gradient(196.14deg, #dde7fc 7.97%, #f1f5ff 92.02%);
+    background: linear-gradient(196.14deg, #1A1A1A 7.97%, #232323 92.02%);
 }
 
 .header-hero-image {
@@ -95,7 +104,7 @@ ul {
 }
 
 .header-community span {
-    color: var(--bg-blue);
+    color: var(--lime);
     display: block;
 }
 
@@ -115,13 +124,13 @@ ul {
 }
 
 .bg-bottom-menu {
-    background: linear-gradient(181.83deg, #163665 2.2%, #234982 99.11%);
+    background: linear-gradient(181.83deg, #1A1A1A 2.2%, #2A2A2A 99.11%);
 }
 
 
 /* main */
 main {
-    background-color: #fff;
+    background-color: #1A1A1A;
     min-height: 100vh;
 }
 
