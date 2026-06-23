@@ -173,3 +173,18 @@ nav.navbar.bg-primary {
 [data-bs-theme="dark"] .MuiInputLabel-root {
     color: var(--bs-secondary-color) !important;
 }
+
+/*
+ * Ripped & Renew — calendar widget day numbers
+ *
+ * The dashboard Calendar widget (from @wger-project/react-components)
+ * renders each day-of-month cell as a bare <div> with no class, just an
+ * inline `style="color: black"` (weekday) or `color: rgb(229,57,69)`
+ * (weekend, red — left alone). Class-based MUI overrides above can't
+ * reach it; only an !important rule beats a plain (non-!important)
+ * inline style. Match on the inline style value itself so the red
+ * weekend/selected-day colors are untouched.
+ */
+[data-bs-theme="dark"] div[style*="color: black"] {
+    color: var(--bs-body-color) !important;
+}
