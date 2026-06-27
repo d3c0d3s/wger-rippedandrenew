@@ -66,6 +66,38 @@
                                 </a>
                             {% endif %}
                         </div>
+                    {% else %}
+                        <ul class="navbar-nav my-2 my-lg-0">
+                            <li class="dropdown nav-item">
+                                <a href="#" class="dropdown-toggle nav-link fw-semibold"
+                                   data-bs-toggle="dropdown">
+                                    {{ user|format_username }}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'core:index' %}">
+                                            {% translate "Dashboard" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'core:user:preferences' %}">
+                                            {% translate "My preferences" %}
+                                        </a>
+                                    </li>
+                                    <li class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="post" action="{% url 'account_logout' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item">
+                                                <span class="{% fa_class 'sign-out-alt' %}"></span>
+                                                {% translate "Logout" %}
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     {% endif %}
                 </div>
             </div>
